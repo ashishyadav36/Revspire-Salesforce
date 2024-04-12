@@ -1,0 +1,33 @@
+<template>
+    <c-pitch-dialog show-modal={showModal} onclose={handleCloseModal}></c-pitch-dialog>
+
+    <lightning-card title="Pitch Details " class="white-background">
+        <template if:true={isPitchAvailable}>
+            <!-- Render pitch details -->
+            <div class="slds-m-around_medium">
+                <template for:each={pitches} for:item="pitch">
+                    <lightning-input key={pitch.id} label="Opportunity" value={opportunityName}
+                        disabled={isDisabled}></lightning-input>
+                    <lightning-input key={pitch.id} label="Pitch Name" value={pitch.name}
+                        disabled={isDisabled}></lightning-input>
+                    <lightning-input key={pitch.id} label="Pitch Layout" value={layoutName}
+                        disabled={isDisabled}></lightning-input>
+                    <lightning-input key={pitch.id} label="Title" value={pitch.title}
+                        disabled={isDisabled}></lightning-input>
+                    <lightning-input key={pitch.id} label="Headline" value={pitch.headline}
+                        disabled={isDisabled}></lightning-input>
+                    <lightning-textarea key={pitch.id} label="Description" value={pitch.description}
+                        disabled={isDisabled}></lightning-textarea> <!-- Changed pitche to pitch here -->
+                </template>
+            </div>
+            <div class="slds-m-around_medium">
+                <lightning-button label="Next" variant="brand"></lightning-button>
+            </div>
+        </template>
+        <template if:false={isPitchAvailable}>
+            <div class="slds-m-around_medium">
+                <lightning-button label="Add Pitch" variant="brand" onclick={handleOpenModal}></lightning-button>
+            </div>
+        </template>
+    </lightning-card>
+</template>
