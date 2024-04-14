@@ -1,5 +1,6 @@
 <template>
-    <c-pitch-dialog show-modal={showModal} onclose={handleCloseModal}></c-pitch-dialog>
+    <c-pitch-dialog show-modal={showModal} onclose={handleCloseModal}     current-record-id={currentRecordId}
+    opportunity-name={opportunityName}></c-pitch-dialog>
 
     <lightning-card title="Pitch Details " class="white-background">
         <template if:true={isPitchAvailable}>

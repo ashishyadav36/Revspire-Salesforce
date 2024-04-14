@@ -7,8 +7,8 @@ import { getRecord } from 'lightning/uiRecordApi';
 export default class PitchInfo extends LightningElement {
     @api recordId; 
     @track showModal = false;
-    currentRecordId;
-    opportunityName;
+    @api currentRecordId; // Expose currentRecordId
+    @api opportunityName; // Expose opportunityName
     layoutName;
     pitches = [];
 
