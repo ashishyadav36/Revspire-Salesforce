@@ -1,4 +1,4 @@
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, api, wire, track } from 'lwc';
 import getOpportunities from '@salesforce/apex/OpportunityPitchController.getOpportunities';
 import getPitchLayouts from '@salesforce/apex/OpportunityPitchController.getPitchLayouts';
 
@@ -12,7 +12,7 @@ export default class PitchDialog extends LightningElement {
     newPitchTitle = ''; // Store Title
     newPitchHeadline = ''; // Store Headline
     newPitchDescription = ''; // Store Description
-    showNextInputFields = false; // Track the state of the component
+    @track showNextInputFields = false; // Track the state of the component
 
     @wire(getPitchLayouts)
     wiredPitchLayouts({data, error}) {
@@ -79,5 +79,30 @@ export default class PitchDialog extends LightningElement {
         this.newPitchDescription = "";
         this.selectedPitchLayoutId = "";
         this.currentRecordId = "";
+    }
+
+
+
+   @track selections = [];
+
+    addSelection() {
+        // Generate a unique ID for the new selection
+        const newSelectionId = this.selections.length + 1;
+        
+        // Push a new selection object into the selections array
+        this.selections.push({
+            id: newSelectionId,
+            title: '',
+            content: '',
+            tagline: ''
+        });
+    }
+
+    removeSelection(event) {
+        // Retrieve the id of the selection to be removed from the event
+        const selectionId = event.target.dataset.id;
+
+        // Filter out the selection with the matching id from the selections array
+        this.selections = this.selections.filter(selection => selection.id !== parseInt(selectionId));
     }
 }
