@@ -33,22 +33,22 @@
                     <template if:true={showNextInputFields}>
                         <!-- New set of input fields for next step -->
                         <lightning-button label="Add Selection" onclick={addSelection}  style="margin-bottom: 20px;"></lightning-button>
-
-<template for:each={selections} for:item="selection">
-    <div key={selection.id} class="slds-card_boundary" style="padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 10px; margin-top: 10px;">
-        <lightning-input label="Selection Title" value={selection.title}></lightning-input>
-        <lightning-input label="Content" value={selection.content}></lightning-input>
-        <lightning-input label="Content Tagline" value={selection.tagline}></lightning-input>
-        <div class="slds-m-top_x-small " style="display: flex; justify-content: space-between;">
-            <div></div>
-            <lightning-button variant="destructive-text" label="Remove" onclick={removeSelection}
-                data-id={selection.id}></lightning-button>
-        </div>
-    </div>
-</template>
-
-</template>
-
+                        <template for:each={selections} for:item="selection">
+                            <div key={selection.id} class="slds-card_boundary" style="padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 10px; margin-top: 10px;">
+                                <lightning-input label="Selection Title" value={selection.title} onchange={handleSelectionTitleChange}
+                                    data-id={selection.id}></lightning-input>
+                                <lightning-input label="Content" value={selection.content} onchange={handleSelectionContentChange}
+                                    data-id={selection.id}></lightning-input>
+                                <lightning-input label="Content Tagline" value={selection.tagline} onchange={handleSelectionTaglineChange}
+                                    data-id={selection.id}></lightning-input>
+                                <div class="slds-m-top_x-small " style="display: flex; justify-content: space-between;">
+                                    <div></div>
+                                    <lightning-button variant="destructive-text" label="Remove" onclick={removeSelection}
+                                        data-id={selection.id}></lightning-button>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
                 </div>
                 <footer class="slds-modal__footer">
                     <!-- Show different buttons based on the state -->

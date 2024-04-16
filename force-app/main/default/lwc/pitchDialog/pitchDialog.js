@@ -13,8 +13,10 @@ export default class PitchDialog extends LightningElement {
     newPitchHeadline = ''; // Store Headline
     newPitchDescription = ''; // Store Description
     @track showNextInputFields = false; // Track the state of the component
+    @track selections = [];
 
     @wire(getPitchLayouts)
+        
     wiredPitchLayouts({data, error}) {
         if(data) {
             this.pitchLayouts = data.map(layout => ({label: layout.Name, value: layout.Id}));
@@ -24,6 +26,7 @@ export default class PitchDialog extends LightningElement {
     }
 
     closeModal() {
+        console.log("Array is here !",this.selections)
         console.log("Close modal is Pressed !")
         this.dispatchEvent(new CustomEvent('close'));
 
@@ -50,6 +53,36 @@ export default class PitchDialog extends LightningElement {
         this.newPitchDescription = event.target.value;
     }
 
+// handleSelectionTitleChange(event) {
+//     const selectionId = event.target.dataset.id;
+//     if (selectionId !== -1) {
+//         this.selections[selectionId -1].title = event.target.value;
+//     }
+// }
+
+handleSelectionTitleChange(event) {
+    const selectionId = parseInt(event.target.dataset.id, 10); // Convert to number
+    if (!isNaN(selectionId)) {
+        this.selections[selectionId - 1].title = event.target.value;
+    }
+}
+
+    
+    
+handleSelectionContentChange(event) {
+    const selectionId = event.target.dataset.id;
+    if (selectionId !== -1) {
+        this.selections[selectionId -1].content = event.target.value;
+    }
+}
+
+handleSelectionTaglineChange(event) {
+    const selectionId = event.target.dataset.id;
+    if (selectionId !== -1) {
+        this.selections[selectionId -1 ].tagline = event.target.value;
+    }
+}
+
     handleNext() {
         // Toggle the flag to switch to the next set of input fields
         console.log('Selected pitch name:', this.newPitchName);
@@ -63,12 +96,12 @@ export default class PitchDialog extends LightningElement {
 
     handleBack() {
         this.showNextInputFields = false;
-        
     }
 
     savePitch() {
         // Add logic to save the pitch
-        console.log("I got pressed!!")
+
+        console.log("Selections:", this.selections);
 
         this.closeModal();
         this.showNextInputFields = false;
@@ -82,21 +115,16 @@ export default class PitchDialog extends LightningElement {
     }
 
 
+addSelection() {
+    const newSelectionId = this.selections.length + 1;
+    this.selections.push({
+        id: newSelectionId,
+        title: '', // Example value
+        content: '', // Example value
+        tagline: '' // Example value
+    });
+}
 
-   @track selections = [];
-
-    addSelection() {
-        // Generate a unique ID for the new selection
-        const newSelectionId = this.selections.length + 1;
-        
-        // Push a new selection object into the selections array
-        this.selections.push({
-            id: newSelectionId,
-            title: '',
-            content: '',
-            tagline: ''
-        });
-    }
 
     removeSelection(event) {
         // Retrieve the id of the selection to be removed from the event
