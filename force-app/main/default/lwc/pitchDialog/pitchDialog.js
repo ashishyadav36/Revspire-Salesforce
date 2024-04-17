@@ -13,7 +13,7 @@ export default class PitchDialog extends LightningElement {
     newPitchHeadline = ''; // Store Headline
     newPitchDescription = ''; // Store Description
     @track showNextInputFields = false; // Track the state of the component
-    @track selections = [];
+    @track sections = [];
 
     @wire(getPitchLayouts)
         
@@ -26,7 +26,7 @@ export default class PitchDialog extends LightningElement {
     }
 
     closeModal() {
-        console.log("Array is here !",this.selections)
+        console.log("Array is here !",this.sections)
         console.log("Close modal is Pressed !")
         this.dispatchEvent(new CustomEvent('close'));
 
@@ -53,33 +53,28 @@ export default class PitchDialog extends LightningElement {
         this.newPitchDescription = event.target.value;
     }
 
-// handleSelectionTitleChange(event) {
-//     const selectionId = event.target.dataset.id;
-//     if (selectionId !== -1) {
-//         this.selections[selectionId -1].title = event.target.value;
-//     }
-// }
 
-handleSelectionTitleChange(event) {
-    const selectionId = parseInt(event.target.dataset.id, 10); // Convert to number
-    if (!isNaN(selectionId)) {
-        this.selections[selectionId - 1].title = event.target.value;
+
+handlesectionTitleChange(event) {
+    const sectionId = parseInt(event.target.dataset.id, 10); // Convert to number
+    if (!isNaN(sectionId)) {
+        this.sections[sectionId - 1].title = event.target.value;
     }
 }
 
     
     
-handleSelectionContentChange(event) {
-    const selectionId = event.target.dataset.id;
-    if (selectionId !== -1) {
-        this.selections[selectionId -1].content = event.target.value;
+handlesectionContentChange(event) {
+    const sectionId = event.target.dataset.id;
+    if (sectionId !== -1) {
+        this.sections[sectionId -1].content = event.target.value;
     }
 }
 
-handleSelectionTaglineChange(event) {
-    const selectionId = event.target.dataset.id;
-    if (selectionId !== -1) {
-        this.selections[selectionId -1 ].tagline = event.target.value;
+handlesectionTaglineChange(event) {
+    const sectionId = event.target.dataset.id;
+    if (sectionId !== -1) {
+        this.sections[sectionId -1 ].tagline = event.target.value;
     }
 }
 
@@ -101,7 +96,7 @@ handleSelectionTaglineChange(event) {
     savePitch() {
         // Add logic to save the pitch
 
-        console.log("Selections:", this.selections);
+        console.log("sections:", this.sections);
 
         this.closeModal();
         this.showNextInputFields = false;
@@ -115,22 +110,53 @@ handleSelectionTaglineChange(event) {
     }
 
 
-addSelection() {
-    const newSelectionId = this.selections.length + 1;
-    this.selections.push({
-        id: newSelectionId,
-        title: '', // Example value
-        content: '', // Example value
-        tagline: '' // Example value
+// addsection() {
+//     const newsectionId = this.sections.length + 1;
+//     this.sections.push({
+//         id: newsectionId,
+//         title: '', // Example value
+//         content: '', // Example value
+//         tagline: '' // Example value
+//     });
+    // }
+    
+    addsection() {
+    const newsectionId = this.sections.length + 1;
+    this.sections.push({
+        id: newsectionId,
+        title: '',
+        contentPairs: [
+            {
+                content: '',
+                tagline: ''
+            }
+        ]
     });
+    }
+    
+
+    addContentPair(event) {
+    // Retrieve the id of the section to which the content pair will be added
+    const sectionId = parseInt(event.target.dataset.sectionId, 10);
+
+    // Find the section by its id
+    const section = this.sections.find(section => section.id === sectionId);
+        console.log(sectionId)
+        console.log(section)
+    // If the section is found, add a new content pair to its contentPairs array
+    if (section) {
+        section.contentPairs.push({
+            content: '', // Example value
+            tagline: '' // Example value
+        });
+    }
 }
 
+    removesection(event) {
+        // Retrieve the id of the section to be removed from the event
+        const sectionId = event.target.dataset.id;
 
-    removeSelection(event) {
-        // Retrieve the id of the selection to be removed from the event
-        const selectionId = event.target.dataset.id;
-
-        // Filter out the selection with the matching id from the selections array
-        this.selections = this.selections.filter(selection => selection.id !== parseInt(selectionId));
+        // Filter out the section with the matching id from the sections array
+        this.sections = this.sections.filter(section => section.id !== parseInt(sectionId));
     }
 }

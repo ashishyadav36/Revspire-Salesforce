@@ -15,36 +15,46 @@
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
                     <!-- First set of input fields -->
                     <template if:false={showNextInputFields}>
-                    <lightning-input label="Pitch Name" value={newPitchName} onchange={handleNameChange}></lightning-input>
-                    
-                    <lightning-input label="Opportunity" value={opportunityName} disabled="true"></lightning-input>
-                    
-                    <lightning-combobox name="pitchLayout" label="Select a Pitch Layout" value={selectedPitchLayoutId}
-                        options={pitchLayouts} onchange={handlePitchLayoutChange}>
-                    </lightning-combobox>
-                    
-                    <lightning-input label="Title" value={newPitchTitle} onchange={handleTitleChange}></lightning-input>
-                    <lightning-input label="Headline " value={newPitchHeadline} onchange={handleHeadlineChange}></lightning-input>
-                    <lightning-textarea label="Description " value={newPitchDescription}
-                        onchange={handleDescriptionChange}></lightning-textarea>
+                        <lightning-input label="Pitch Name" value={newPitchName}
+                            onchange={handleNameChange}></lightning-input>
+
+                        <lightning-input label="Opportunity" value={opportunityName} disabled="true"></lightning-input>
+
+                        <lightning-combobox name="pitchLayout" label="Select a Pitch Layout"
+                            value={selectedPitchLayoutId} options={pitchLayouts} onchange={handlePitchLayoutChange}>
+                        </lightning-combobox>
+
+                        <lightning-input label="Title" value={newPitchTitle}
+                            onchange={handleTitleChange}></lightning-input>
+                        <lightning-input label="Headline " value={newPitchHeadline}
+                            onchange={handleHeadlineChange}></lightning-input>
+                        <lightning-textarea label="Description " value={newPitchDescription}
+                            onchange={handleDescriptionChange}></lightning-textarea>
                     </template>
 
                     <!-- Second set of input fields -->
                     <template if:true={showNextInputFields}>
                         <!-- New set of input fields for next step -->
-                        <lightning-button label="Add Selection" onclick={addSelection}  style="margin-bottom: 20px;"></lightning-button>
-                        <template for:each={selections} for:item="selection">
-                            <div key={selection.id} class="slds-card_boundary" style="padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 10px; margin-top: 10px;">
-                                <lightning-input label="Selection Title" value={selection.title} onchange={handleSelectionTitleChange}
-                                    data-id={selection.id}></lightning-input>
-                                <lightning-input label="Content" value={selection.content} onchange={handleSelectionContentChange}
-                                    data-id={selection.id}></lightning-input>
-                                <lightning-input label="Content Tagline" value={selection.tagline} onchange={handleSelectionTaglineChange}
-                                    data-id={selection.id}></lightning-input>
+                        <lightning-button label="Add section" onclick={addsection}
+                            style="margin-bottom: 20px;"></lightning-button>
+                        <template for:each={sections} for:item="section">
+                            <div key={section.id} class="slds-card_boundary"
+                                style="padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 10px; margin-top: 10px;">
+                                <lightning-input label="Section Title" value={section.title}
+                                    onchange={handlesectionTitleChange} data-id={section.id}></lightning-input>
+                                        <lightning-button label="Add Content Pair" onclick={addContentPair} data-section-id={section.id}></lightning-button>
+                                            <template for:each={section.contentPairs} for:item="contentPair">
+                                                <div class="slds-m-top_x-small" key={section.id}>
+                                                    <lightning-input label="Content" value={contentPair.content} onchange={handleContentChange}
+                                                        data-id={section.id}></lightning-input>
+                                                    <lightning-input label="Content Tagline" value={contentPair.tagline} onchange={handleTaglineChange}
+                                                        data-id={section.id}></lightning-input>
+                                                </div>
+                                            </template>
                                 <div class="slds-m-top_x-small " style="display: flex; justify-content: space-between;">
                                     <div></div>
-                                    <lightning-button variant="destructive-text" label="Remove" onclick={removeSelection}
-                                        data-id={selection.id}></lightning-button>
+                                    <lightning-button variant="destructive-text" label="Remove"
+                                        onclick={removesection} data-id={section.id}></lightning-button>
                                 </div>
                             </div>
                         </template>
