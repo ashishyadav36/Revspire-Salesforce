@@ -65,16 +65,32 @@ handlesectionTitleChange(event) {
     
     
 handlesectionContentChange(event) {
-    const sectionId = event.target.dataset.id;
-    if (sectionId !== -1) {
-        this.sections[sectionId -1].content = event.target.value;
+    // Retrieve the content pair ID from the event
+    const contentPairId = event.target.dataset.id;
+    // Find the section that contains the content pair
+    const section = this.sections.find(section => section.contentPairs.some(contentPair => contentPair.id === contentPairId));
+    if (section) {
+        // Find the content pair within the section
+        const contentPair = section.contentPairs.find(cp => cp.id === contentPairId);
+        if (contentPair) {
+            // Update the content of the content pair
+            contentPair.content = event.target.value;
+        }
     }
 }
 
 handlesectionTaglineChange(event) {
-    const sectionId = event.target.dataset.id;
-    if (sectionId !== -1) {
-        this.sections[sectionId -1 ].tagline = event.target.value;
+    // Retrieve the content pair ID from the event
+    const contentPairId = event.target.dataset.id;
+    // Find the section that contains the content pair
+    const section = this.sections.find(section => section.contentPairs.some(contentPair => contentPair.id === contentPairId));
+    if (section) {
+        // Find the content pair within the section
+        const contentPair = section.contentPairs.find(cp => cp.id === contentPairId);
+        if (contentPair) {
+            // Update the tagline of the content pair
+            contentPair.tagline = event.target.value;
+        }
     }
 }
 
@@ -108,47 +124,57 @@ handlesectionTaglineChange(event) {
         this.selectedPitchLayoutId = "";
         this.currentRecordId = "";
     }
-
-
-// addsection() {
-//     const newsectionId = this.sections.length + 1;
-//     this.sections.push({
-//         id: newsectionId,
-//         title: '', // Example value
-//         content: '', // Example value
-//         tagline: '' // Example value
-//     });
-    // }
     
-    addsection() {
+addsection() {
     const newsectionId = this.sections.length + 1;
     this.sections.push({
         id: newsectionId,
         title: '',
         contentPairs: [
             {
+                // id: newsectionId + '-0', // Unique identifier for the content pair
+                id: 1, 
                 content: '',
                 tagline: ''
             }
         ]
     });
-    }
-    
+}
 
-    addContentPair(event) {
+
+addContentPair(event) {
     // Retrieve the id of the section to which the content pair will be added
     const sectionId = parseInt(event.target.dataset.sectionId, 10);
 
     // Find the section by its id
     const section = this.sections.find(section => section.id === sectionId);
-        console.log(sectionId)
-        console.log(section)
+
     // If the section is found, add a new content pair to its contentPairs array
     if (section) {
+        // Generate a unique ID for the new content pair
+        // This ID is a combination of the section ID and the current length of the contentPairs array
+        const newContentPairId = section.contentPairs.length + 1;
+
+        // Add the new content pair with the unique ID
         section.contentPairs.push({
+            id: newContentPairId, // Unique identifier for the content pair
             content: '', // Example value
             tagline: '' // Example value
         });
+    }
+}
+    
+removeContentPair(event) {
+    // Retrieve the id of the content pair to be removed from the event
+    // console.log("I reached this component !")
+    const contentPairId = event.target.dataset.id;
+    // console.log(event.target.dataset.id)
+    // Find the section that contains the content pair
+    const section = this.sections.find(section => section.contentPairs.some(contentPair => contentPair.id === contentPairId));
+    console.log(section)
+    // If the section is found, remove the content pair from its contentPairs array
+    if (section) {
+        section.contentPairs = section.contentPairs.filter(contentPair => contentPair.id !== contentPairId);
     }
 }
 

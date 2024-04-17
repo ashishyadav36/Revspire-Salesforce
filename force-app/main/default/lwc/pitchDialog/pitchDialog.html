@@ -42,19 +42,25 @@
                                 style="padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 10px; margin-top: 10px;">
                                 <lightning-input label="Section Title" value={section.title}
                                     onchange={handlesectionTitleChange} data-id={section.id}></lightning-input>
-                                        <lightning-button label="Add Content Pair" onclick={addContentPair} data-section-id={section.id}></lightning-button>
-                                            <template for:each={section.contentPairs} for:item="contentPair">
-                                                <div class="slds-m-top_x-small" key={section.id}>
-                                                    <lightning-input label="Content" value={contentPair.content} onchange={handleContentChange}
-                                                        data-id={section.id}></lightning-input>
-                                                    <lightning-input label="Content Tagline" value={contentPair.tagline} onchange={handleTaglineChange}
-                                                        data-id={section.id}></lightning-input>
-                                                </div>
-                                            </template>
+                                <lightning-button label="Add Content Pair" onclick={addContentPair}
+                                    data-section-id={section.id}></lightning-button>
+                                <template for:each={section.contentPairs} for:item="contentPair">
+                                    <div class="slds-m-top_x-small" key={section.id}>
+                                        <lightning-input label="Content" value={contentPair.content} onchange={handlesectionContentChange}
+                                            data-id={contentPair.id}></lightning-input>
+                                        <lightning-input label="Content Tagline" value={contentPair.tagline} onchange={handlesectionTaglineChange}
+                                            data-id={contentPair.id}></lightning-input>
+                                    </div>
+                                    <!-- <lightning-button key={contentPair.id} label="Remove" onclick={removeContentPair} data-id={contentPair.id}></lightning-button>
+                                                 -->
+                                    <lightning-button key={contentPair.id} label="Remove" onclick={removeContentPair}
+                                        data-id={contentPair.id}></lightning-button>
+
+                                </template>
                                 <div class="slds-m-top_x-small " style="display: flex; justify-content: space-between;">
                                     <div></div>
-                                    <lightning-button variant="destructive-text" label="Remove"
-                                        onclick={removesection} data-id={section.id}></lightning-button>
+                                    <lightning-button variant="destructive-text" label="Remove" onclick={removesection}
+                                        data-id={section.id}></lightning-button>
                                 </div>
                             </div>
                         </template>
