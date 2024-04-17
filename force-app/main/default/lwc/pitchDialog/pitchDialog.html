@@ -40,26 +40,36 @@
                         <template for:each={sections} for:item="section">
                             <div key={section.id} class="slds-card_boundary"
                                 style="padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 10px; margin-top: 10px;">
-                                <lightning-input label="Section Title" value={section.title}
-                                    onchange={handlesectionTitleChange} data-id={section.id}></lightning-input>
-                                <lightning-button label="Add Content Pair" onclick={addContentPair}
-                                    data-section-id={section.id}></lightning-button>
-                                <template for:each={section.contentPairs} for:item="contentPair">
-                                    <div class="slds-m-top_x-small" key={section.id}>
-                                        <lightning-input label="Content" value={contentPair.content} onchange={handlesectionContentChange}
+                                <div class="section-title-box">
+                                    <lightning-input label="Section Title" value={section.title} onchange={handlesectionTitleChange}
+                                        data-id={section.id}></lightning-input>
+                                    <lightning-button-icon variant="container" onclick={addContentPair} data-section-id={section.id}
+                                        icon-name="utility:add"></lightning-button-icon>
+
+                                </div>
+                    
+                                <template for:each={section.contentPairs} for:item="contentPair" >
+                                    <div class="slds-m-top_x-small slds-card_boundary slds-p-around_x-small" key={section.id}>
+                                        <div  style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div></div>
+                                            <lightning-button-icon class="custom-icon" key={contentPair.id} onclick={removeContentPair} data-id={contentPair.id}
+                                            style="margin-right: 5px; margin-bottom: -10px" icon-name="utility:delete" variant="bare" alternative-text="Delete"></lightning-button-icon>
+                                        </div>
+                                        <lightning-input label="Content" value={contentPair.content}
+                                            onchange={handlesectionContentChange}
                                             data-id={contentPair.id}></lightning-input>
-                                        <lightning-input label="Content Tagline" value={contentPair.tagline} onchange={handlesectionTaglineChange}
-                                            data-id={contentPair.id}></lightning-input>
+                                            <!-- <lightning-combobox label="Content" value={section.content} onchange={handlesectionContentChange}
+                                                placeholder="Select Content" options={contentData}></lightning-combobox> -->
+                                        <lightning-input label="Content Tagline" value={contentPair.tagline}
+                                            onchange={handlesectionTaglineChange}
+                                            data-id={contentPair.id}></lightning-input>                                    
                                     </div>
-                                    <!-- <lightning-button key={contentPair.id} label="Remove" onclick={removeContentPair} data-id={contentPair.id}></lightning-button>
-                                                 -->
-                                    <lightning-button key={contentPair.id} label="Remove" onclick={removeContentPair}
-                                        data-id={contentPair.id}></lightning-button>
+                                    
 
                                 </template>
                                 <div class="slds-m-top_x-small " style="display: flex; justify-content: space-between;">
                                     <div></div>
-                                    <lightning-button variant="destructive-text" label="Remove" onclick={removesection}
+                                    <lightning-button variant="destructive-text"  label="Remove" onclick={removesection}
                                         data-id={section.id}></lightning-button>
                                 </div>
                             </div>

@@ -1,6 +1,6 @@
 import { LightningElement, api, wire, track } from 'lwc';
-import getOpportunities from '@salesforce/apex/OpportunityPitchController.getOpportunities';
 import getPitchLayouts from '@salesforce/apex/OpportunityPitchController.getPitchLayouts';
+import getContentData from '@salesforce/apex/OpportunityPitchController.getContentData'; 
 
 export default class PitchDialog extends LightningElement {
     @api showModal = false; // Controlled by the parent component
@@ -14,6 +14,7 @@ export default class PitchDialog extends LightningElement {
     newPitchDescription = ''; // Store Description
     @track showNextInputFields = false; // Track the state of the component
     @track sections = [];
+    @track contentData = [];
 
     @wire(getPitchLayouts)
         
@@ -22,6 +23,19 @@ export default class PitchDialog extends LightningElement {
             this.pitchLayouts = data.map(layout => ({label: layout.Name, value: layout.Id}));
         } else if(error) {
             // Handle error
+        }
+    }
+
+    @wire(getContentData)
+    wiredContentData({ data, error }) {
+        if (data) {
+            // Handle the fetched content data
+            this.contentData = data;
+            console.log('Content Data:', data);
+            // Example: this.contentData = data;
+        } else if (error) {
+            // Handle error
+            console.error('Error fetching content data:', error);
         }
     }
 
@@ -166,17 +180,22 @@ addContentPair(event) {
     
 removeContentPair(event) {
     // Retrieve the id of the content pair to be removed from the event
-    // console.log("I reached this component !")
-    const contentPairId = event.target.dataset.id;
-    // console.log(event.target.dataset.id)
+    const contentPairId = parseInt(event.target.dataset.id, 10); // Ensure it's a number
+    console.log("Content Pair ID to remove:", contentPairId);
+
     // Find the section that contains the content pair
     const section = this.sections.find(section => section.contentPairs.some(contentPair => contentPair.id === contentPairId));
-    console.log(section)
+    console.log("Section found:", section);
+
     // If the section is found, remove the content pair from its contentPairs array
     if (section) {
         section.contentPairs = section.contentPairs.filter(contentPair => contentPair.id !== contentPairId);
+        // Notify the component of changes if necessary
+        this.sections = [...this.sections]; // This line ensures reactivity by creating a new array
     }
 }
+
+
 
     removesection(event) {
         // Retrieve the id of the section to be removed from the event
