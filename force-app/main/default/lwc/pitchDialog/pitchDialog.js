@@ -182,9 +182,26 @@ addContentPair(event) {
 }
 
     
+// removeContentPair(event) {
+//     // Retrieve the id of the content pair to be removed from the event
+//     const contentPairId = parseInt(event.target.dataset.id, 10); // Ensure it's a number
+//     console.log("Content Pair ID to remove:", contentPairId);
+
+//     // Find the section that contains the content pair
+//     const section = this.sections.find(section => section.contentPairs.some(contentPair => contentPair.id === contentPairId));
+//     console.log("Section found:", section);
+
+//     // If the section is found, remove the content pair from its contentPairs array
+//     if (section) {
+//         section.contentPairs = section.contentPairs.filter(contentPair => contentPair.id !== contentPairId);
+//         // Notify the component of changes if necessary
+//         this.sections = [...this.sections]; // This line ensures reactivity by creating a new array
+//     }
+// }
+    
 removeContentPair(event) {
     // Retrieve the id of the content pair to be removed from the event
-    const contentPairId = parseInt(event.target.dataset.id, 10); // Ensure it's a number
+    const contentPairId = event.target.dataset.id; // Keep it as a string
     console.log("Content Pair ID to remove:", contentPairId);
 
     // Find the section that contains the content pair
@@ -198,6 +215,7 @@ removeContentPair(event) {
         this.sections = [...this.sections]; // This line ensures reactivity by creating a new array
     }
 }
+
 
 
 

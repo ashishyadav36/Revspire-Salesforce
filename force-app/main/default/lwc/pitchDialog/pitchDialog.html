@@ -45,7 +45,6 @@
                                         data-id={section.id}></lightning-input>
                                     <lightning-button-icon variant="container" onclick={addContentPair} data-section-id={section.id}
                                         icon-name="utility:add"></lightning-button-icon>
-
                                 </div>
                     
                                 <template for:each={section.contentPairs} for:item="contentPair" >
@@ -53,7 +52,7 @@
                                         <div  style="display: flex; justify-content: space-between; align-items: center;">
                                             <div></div>
                                             <lightning-button-icon class="custom-icon" key={contentPair.id} onclick={removeContentPair} data-id={contentPair.id}
-                                            style="margin-right: 5px; margin-bottom: -10px" icon-name="utility:delete" variant="bare" alternative-text="Delete"></lightning-button-icon>
+                                            style="margin-right: 5px;" icon-name="utility:delete" variant="bare" alternative-text="Delete"></lightning-button-icon>
                                         </div>
                                         <lightning-input label="Content" value={contentPair.content} onchange={handlesectionContentChange}
                                             data-id={contentPair.id}></lightning-input>
