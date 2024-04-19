@@ -141,19 +141,22 @@ handlesectionTaglineChange(event) {
     
 addsection() {
     const newsectionId = this.sections.length + 1;
+    // Initialize an empty array for contentPairs
+    const contentPairs = [];
+    // Add a new content pair with a unique ID
+    contentPairs.push({
+        id: `${newsectionId}-1`, // Unique identifier for the content pair
+        content: '', // Example value
+        tagline: '' // Example value
+    });
+    // Push the new section with its contentPairs array
     this.sections.push({
         id: newsectionId,
         title: '',
-        contentPairs: [
-            {
-                // id: newsectionId + '-0', // Unique identifier for the content pair
-                id: 1, 
-                content: '',
-                tagline: ''
-            }
-        ]
+        contentPairs: contentPairs
     });
 }
+
 
 
 addContentPair(event) {
@@ -171,12 +174,13 @@ addContentPair(event) {
 
         // Add the new content pair with the unique ID
         section.contentPairs.push({
-            id: newContentPairId, // Unique identifier for the content pair
+            id: `${sectionId}-${newContentPairId}`, // Unique identifier for the content pair
             content: '', // Example value
             tagline: '' // Example value
         });
     }
 }
+
     
 removeContentPair(event) {
     // Retrieve the id of the content pair to be removed from the event

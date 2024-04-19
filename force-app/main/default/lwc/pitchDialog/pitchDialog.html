@@ -55,14 +55,10 @@
                                             <lightning-button-icon class="custom-icon" key={contentPair.id} onclick={removeContentPair} data-id={contentPair.id}
                                             style="margin-right: 5px; margin-bottom: -10px" icon-name="utility:delete" variant="bare" alternative-text="Delete"></lightning-button-icon>
                                         </div>
-                                        <lightning-input label="Content" value={contentPair.content}
-                                            onchange={handlesectionContentChange}
+                                        <lightning-input label="Content" value={contentPair.content} onchange={handlesectionContentChange}
                                             data-id={contentPair.id}></lightning-input>
-                                            <!-- <lightning-combobox label="Content" value={section.content} onchange={handlesectionContentChange}
-                                                placeholder="Select Content" options={contentData}></lightning-combobox> -->
-                                        <lightning-input label="Content Tagline" value={contentPair.tagline}
-                                            onchange={handlesectionTaglineChange}
-                                            data-id={contentPair.id}></lightning-input>                                    
+                                        <lightning-input label="Content Tagline" value={contentPair.tagline} onchange={handlesectionTaglineChange}
+                                            data-id={contentPair.id}></lightning-input>
                                     </div>
                                     
 
