@@ -1,0 +1,14 @@
+.searchButtonStyle {
+ background-color: white;
+}
+.list-item:hover{
+    background-color: rgb(235, 235, 235);
+}
+.options-box{
+    background-color: white;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+.searchbox-btn{
+    margin-top: 3px;
+}

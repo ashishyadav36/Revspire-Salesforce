@@ -1,0 +1,48 @@
+<template>
+    <div class="lookup-box">
+        <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click"
+            aria-expanded="false" aria-haspopup="listbox" role="combobox">
+            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                role="none">
+                <lightning-input type="text" id="combobox-id-16" value={contentName}
+                    onchange={handleKeyChange} onkeydown={handleClick} onclick={handleClick}
+                     onblur={handleClick} aria-activedescendant="option1" 
+                    aria-autocomplete="list" aria-controls="listbox-id-12" role="textbox"
+                    placeholder="Search..."></lightning-input>
+                <template if:false={contentId}>
+                    <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right searchButtonStyle searchbox-btn"
+                        title="Search" onclick={handleOpenModal}>
+                        <lightning-button-icon icon-name="utility:search" variant="bare" alternative-text="Search"
+                            aria-hidden="true"></lightning-button-icon>
+                    </button>
+                </template>
+                <template if:true={contentId}>
+                    <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right searchButtonStyle searchbox-btn"
+                        title="Remove selected option" onclick={handleUnselect}>
+                        <lightning-button-icon icon-name="utility:close" variant="bare" alternative-text="Remove"
+                            aria-hidden="true"></lightning-button-icon>
+                    </button>
+                </template>
+
+            </div>
+            <!-- Start : Content Search Result -->
+            <div if:true={messageResult} class="options-box slds-p-vertical_x-small slds-p-left_small slds-border_top ">
+                No Result Found!
+            </div>
+            <template if:true={showSearchedValues}>
+               
+                <div class="options-box" >
+                    <ul class="" role="">
+                        <template for:each={contentList} for:item="contentObj">
+                            <li class="list-item slds-p-vertical_x-small slds-p-left_small slds-border_top" style="cursor: pointer;"
+                                key={contentObj.Id} onclick={handleContentSelection}
+                                data-value={contentObj.Id} data-label={contentObj.Name}>
+                                {contentObj.Name}
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>
