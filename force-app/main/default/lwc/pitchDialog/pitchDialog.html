@@ -51,16 +51,14 @@
                                     <div class="slds-m-top_x-small slds-card_boundary slds-p-around_x-small" key={section.id}>
                                         <div  style="display: flex; justify-content: space-between; align-items: center;">
                                             <div></div>
-                                            <lightning-button-icon class="custom-icon" key={contentPair.id} onclick={removeContentPair} data-id={contentPair.id}
+                                            <lightning-button-icon class="custom-icon"  onclick={removeContentPair} data-id={contentPair.id}
                                             style="margin-right: 5px;" icon-name="utility:delete" variant="bare" alternative-text="Delete"></lightning-button-icon>
                                         </div>
-                                        <lightning-input label="Content" value={contentPair.content} onchange={handlesectionContentChange}
-                                            data-id={contentPair.id}></lightning-input>
+                                        <c-content-lookup content-id={contentPair.content} data-id={contentPair.id} onselected={handleContentSelected}
+                                            ></c-content-lookup>
                                         <lightning-input label="Content Tagline" value={contentPair.tagline} onchange={handlesectionTaglineChange}
                                             data-id={contentPair.id}></lightning-input>
                                     </div>
-                                    
-
                                 </template>
                                 <div class="slds-m-top_x-small " style="display: flex; justify-content: space-between;">
                                     <div></div>

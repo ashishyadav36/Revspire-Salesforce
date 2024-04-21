@@ -34,7 +34,7 @@ export default class PitchInfo extends LightningElement {
                     description: pitch.revspiredemoani__Description__c
                 }));
 
-                console.log('Fetched pitches:', this.pitches);
+                // console.log('Fetched pitches:', this.pitches);
                 this.isPitchAvailable = this.pitches.length > 0; // Set isPitchAvailable based on whether pitches array is empty or not
             })
             .catch(error => {
@@ -46,7 +46,7 @@ export default class PitchInfo extends LightningElement {
     wiredOpportunity({ error, data }) {
         if (data) {
             this.opportunityName = data.fields.Name.value;
-            console.log("Opportunity Name: ", this.opportunityName)
+            // console.log("Opportunity Name: ", this.opportunityName)
         } else if (error) {
             console.error('Error fetching opportunity name:', error);
         }
@@ -61,17 +61,12 @@ export default class PitchInfo extends LightningElement {
     wiredLayout({ error, data }) {
         if (data) {
             this.layoutName = data.fields.Name.value;
-            console.log("I did went here!")
-            console.log("Layout Name:", this.layoutName)
         } else if (error) {
             console.error('Error fetching layout name:', error);
         }
     }
 
-
-
     handleOpenModal() {
-        console.log("I am getting clicked:")
         this.showModal = true;
     }
 

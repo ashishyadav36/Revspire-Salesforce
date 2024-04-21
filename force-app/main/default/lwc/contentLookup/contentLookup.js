@@ -39,14 +39,23 @@ export default class CustomLookupComp extends LightningElement {
         console.log("handleKeyChange", event)
     }
 
+    // handleContentSelection(event) {
+    //     this.showSearchedValues = false;
+    //     this.contentId = event.target.dataset.value;
+    //     this.contentName = event.target.dataset.label;
+    //     const selectedEvent = new CustomEvent('selected', { detail: this.contentId });
+    //     this.dispatchEvent(selectedEvent);
+    //     console.log(this.contentId)
+    // }
     handleContentSelection(event) {
-        this.showSearchedValues = false;
-        this.contentId = event.target.dataset.value;
-        this.contentName = event.target.dataset.label;
-        const selectedEvent = new CustomEvent('selected', { detail: this.contentId });
-        this.dispatchEvent(selectedEvent);
-        console.log(this.contentId)
+    this.showSearchedValues = false;
+    this.contentId = event.target.dataset.value;
+    this.contentName = event.target.dataset.label;
+    const selectedEvent = new CustomEvent('selected', { detail: this.contentId });
+    this.dispatchEvent(selectedEvent);
+    console.log(this.contentId)
     }
+
 
     handleOpenModal() {
         this.isshow = true;

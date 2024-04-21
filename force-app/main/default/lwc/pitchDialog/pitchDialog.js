@@ -1,6 +1,7 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import getPitchLayouts from '@salesforce/apex/OpportunityPitchController.getPitchLayouts';
 import getContentData from '@salesforce/apex/OpportunityPitchController.getContentData'; 
+import contentLookup from 'c/contentLookup';
 
 export default class PitchDialog extends LightningElement {
     @api showModal = false; // Controlled by the parent component
@@ -78,20 +79,27 @@ handlesectionTitleChange(event) {
 
     
     
-handlesectionContentChange(event) {
+
+handleContentSelected(event) {
     // Retrieve the content pair ID from the event
+    console.log("I reached here !!")
+    console.log("id inside parent comp", event.detail)
+    
     const contentPairId = event.target.dataset.id;
+    console.log("content paird id in parent: ", contentPairId)
     // Find the section that contains the content pair
     const section = this.sections.find(section => section.contentPairs.some(contentPair => contentPair.id === contentPairId));
     if (section) {
         // Find the content pair within the section
         const contentPair = section.contentPairs.find(cp => cp.id === contentPairId);
         if (contentPair) {
-            // Update the content of the content pair
-            contentPair.content = event.target.value;
+            // Update the content of the content pair with the selected content ID
+            contentPair.content = event.detail; // Use event.detail directly
         }
     }
 }
+
+
 
 handlesectionTaglineChange(event) {
     // Retrieve the content pair ID from the event
@@ -110,12 +118,12 @@ handlesectionTaglineChange(event) {
 
     handleNext() {
         // Toggle the flag to switch to the next set of input fields
-        console.log('Selected pitch name:', this.newPitchName);
-        console.log('Selected pitch title:', this.newPitchTitle);
-        console.log('Selected pitch headline:', this.newPitchHeadline);
-        console.log('Selected pitch description:', this.newPitchDescription);
-        console.log('Selected Pitch Layout Id:', this.selectedPitchLayoutId);
-        console.log('Selected opp Id:', this.currentRecordId);
+        // console.log('Selected pitch name:', this.newPitchName);
+        // console.log('Selected pitch title:', this.newPitchTitle);
+        // console.log('Selected pitch headline:', this.newPitchHeadline);
+        // console.log('Selected pitch description:', this.newPitchDescription);
+        // console.log('Selected Pitch Layout Id:', this.selectedPitchLayoutId);
+        // console.log('Selected opp Id:', this.currentRecordId);
         this.showNextInputFields = true;
     }
 
@@ -182,23 +190,6 @@ addContentPair(event) {
 }
 
     
-// removeContentPair(event) {
-//     // Retrieve the id of the content pair to be removed from the event
-//     const contentPairId = parseInt(event.target.dataset.id, 10); // Ensure it's a number
-//     console.log("Content Pair ID to remove:", contentPairId);
-
-//     // Find the section that contains the content pair
-//     const section = this.sections.find(section => section.contentPairs.some(contentPair => contentPair.id === contentPairId));
-//     console.log("Section found:", section);
-
-//     // If the section is found, remove the content pair from its contentPairs array
-//     if (section) {
-//         section.contentPairs = section.contentPairs.filter(contentPair => contentPair.id !== contentPairId);
-//         // Notify the component of changes if necessary
-//         this.sections = [...this.sections]; // This line ensures reactivity by creating a new array
-//     }
-// }
-    
 removeContentPair(event) {
     // Retrieve the id of the content pair to be removed from the event
     const contentPairId = event.target.dataset.id; // Keep it as a string
@@ -215,9 +206,6 @@ removeContentPair(event) {
         this.sections = [...this.sections]; // This line ensures reactivity by creating a new array
     }
 }
-
-
-
 
     removesection(event) {
         // Retrieve the id of the section to be removed from the event
