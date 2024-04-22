@@ -1,26 +1,40 @@
 .section-title-box {
     display: flex;
     flex-direction: row;
-    /* align-items: baseline; */
     align-items: end;
     justify-content: end;
-    /* Align items based on their baseline */
 }
 
-/* Adjust the width of the input and button to match the input fields */
 .section-title-box lightning-input {
     flex: 1;
-    /* Distribute remaining space equally */
 }
 
 .section-title-box lightning-button {
     flex-shrink: 0;
-    /* Prevent the button from shrinking */
     margin-left: 10px;
 
 }
 
 .custom-icon {
     --sds-c-icon-color-text: red;
-    /* Change the color to red */
 }
+
+.file-input{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.logo-title-div{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.header-image {
+    width: 200px;
+    height: auto;
+    margin-bottom: 10px;
+}             

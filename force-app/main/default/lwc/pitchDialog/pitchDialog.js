@@ -2,8 +2,12 @@ import { LightningElement, api, wire, track } from 'lwc';
 import getPitchLayouts from '@salesforce/apex/OpportunityPitchController.getPitchLayouts';
 import getContentData from '@salesforce/apex/OpportunityPitchController.getContentData'; 
 import contentLookup from 'c/contentLookup';
+import revspireLogo from '@salesforce/resourceUrl/revspireLogo'
+// import createPitch from '@salesforce/apex/PitchCreationController.createPitch';
+const headerImageUrl = '';
 
 export default class PitchDialog extends LightningElement {
+    headerImage = revspireLogo;
     @api showModal = false; // Controlled by the parent component
     pitch = {
         name: '',
@@ -29,6 +33,10 @@ export default class PitchDialog extends LightningElement {
     @api opportunityName; // Bind to the exposed property
     @track showNextInputFields = false; // Track the state of the component
     @track contentData = [];
+    
+    @track acceptedFormats = '.jpg,.png,.gif';
+    orgLogoFile;
+    backgroundImageFile;
 
     @wire(getPitchLayouts)
     wiredPitchLayouts({data, error}) {
@@ -79,6 +87,16 @@ export default class PitchDialog extends LightningElement {
         this.pitch.description = event.target.value;
     }
 
+
+    handleOrgLogoUpload(event) {
+        this.orgLogoFile = event.detail.files[0];
+    }
+
+    handleBackgroundImageUpload(event) {
+        this.backgroundImageFile = event.detail.files[0];
+    }
+
+
     handlesectionTitleChange(event) {
         const sectionId = parseInt(event.target.dataset.id, 10); // Convert to number
         if (!isNaN(sectionId)) {
@@ -117,20 +135,32 @@ export default class PitchDialog extends LightningElement {
     }
 
     savePitch() {
-        console.log("Pitch object to save:", this.pitch);
-        // Add logic to save the pitch object
+    console.log("Pitch object to save:", this.pitch);
+    // Convert the pitch object to a JSON string
+    const pitchJsonString = JSON.stringify(this.pitch);
+    console.log("string pitch", pitchJsonString)
+        
+    // // Call the Apex method to create the pitch
+    // createPitch({ jsonInput: pitchJsonString })
+    // .then(result => {
+    //     console.log('Pitch created successfully:', result);
+    //     // Handle success, e.g., show a success message or navigate to another page
+    // })
+    // .catch(error => {
+    //     console.error('Error creating pitch:', error);
+    //     // Handle error, e.g., show an error message
+    // });
 
-
-        this.closeModal();
-        this.showNextInputFields = false;
-        this.pitch = {
-            name: '',
-            opportunity_id: '',
-            title: '',
-            headline: '',
-            description: '',
-            pitch_layout: '',
-            sections: [{
+    this.closeModal();
+    this.showNextInputFields = false;
+    this.pitch = {
+        name: '',
+        opportunity_id: '',
+        title: '',
+        headline: '',
+        description: '',
+        pitch_layout: '',
+        sections: [{
             id: 1,
             name: '',
             contents: [
@@ -141,8 +171,9 @@ export default class PitchDialog extends LightningElement {
                 }
             ]
         }]
-        };
+    };
     }
+
 
     addsection() {
     const newsectionId = this.pitch.sections.length + 1;
