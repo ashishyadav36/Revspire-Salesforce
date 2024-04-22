@@ -5,20 +5,32 @@ import contentLookup from 'c/contentLookup';
 
 export default class PitchDialog extends LightningElement {
     @api showModal = false; // Controlled by the parent component
-    selectedPitchLayoutId = '';
+    pitch = {
+        name: '',
+        opportunity_id: '',
+        title: '',
+        headline: '',
+        description: '',
+        pitch_layout: '',
+        sections: [{
+            id: 1,
+            name: '',
+            contents: [
+                {
+                    id: '1-1',
+                    content: '',
+                    tagline: ''
+                }
+            ]
+        }]
+    };
     pitchLayouts = [];
     @api currentRecordId; // Bind to the exposed property (this is the Opportunity id which to sent to apex class)
     @api opportunityName; // Bind to the exposed property
-    newPitchName = ''; // Store Pitch Name
-    newPitchTitle = ''; // Store Title
-    newPitchHeadline = ''; // Store Headline
-    newPitchDescription = ''; // Store Description
     @track showNextInputFields = false; // Track the state of the component
-    @track sections = [];
     @track contentData = [];
 
     @wire(getPitchLayouts)
-        
     wiredPitchLayouts({data, error}) {
         if(data) {
             this.pitchLayouts = data.map(layout => ({label: layout.Name, value: layout.Id}));
@@ -26,104 +38,77 @@ export default class PitchDialog extends LightningElement {
             // Handle error
         }
     }
-
+    
     @wire(getContentData)
     wiredContentData({ data, error }) {
         if (data) {
             // Handle the fetched content data
             this.contentData = data;
             console.log('Content Data:', data);
-            // Example: this.contentData = data;
         } else if (error) {
             // Handle error
             console.error('Error fetching content data:', error);
         }
     }
-
+    connectedCallback() {
+    // Update the opportunity_id with the currentRecordId when the component is connected
+    this.pitch.opportunity_id = this.currentRecordId;
+    }
     closeModal() {
-        console.log("Array is here !",this.sections)
-        console.log("Close modal is Pressed !")
+        console.log("Pitch object:", this.pitch);
         this.dispatchEvent(new CustomEvent('close'));
-
     }
 
-
     handlePitchLayoutChange(event) {
-        this.selectedPitchLayoutId = event.detail.value;
+        this.pitch.pitch_layout = event.detail.value;
     }
 
     handleNameChange(event) {
-        this.newPitchName = event.target.value;
+        this.pitch.name = event.target.value;
     }
 
     handleTitleChange(event) {
-        this.newPitchTitle = event.target.value;
+        this.pitch.title = event.target.value;
     }
 
     handleHeadlineChange(event) {
-        this.newPitchHeadline = event.target.value;
+        this.pitch.headline = event.target.value;
     }
 
     handleDescriptionChange(event) {
-        this.newPitchDescription = event.target.value;
+        this.pitch.description = event.target.value;
     }
 
-
-
-handlesectionTitleChange(event) {
-    const sectionId = parseInt(event.target.dataset.id, 10); // Convert to number
-    if (!isNaN(sectionId)) {
-        this.sections[sectionId - 1].title = event.target.value;
-    }
-}
-
-    
-    
-
-handleContentSelected(event) {
-    // Retrieve the content pair ID from the event
-    console.log("I reached here !!")
-    console.log("id inside parent comp", event.detail)
-    
-    const contentPairId = event.target.dataset.id;
-    console.log("content paird id in parent: ", contentPairId)
-    // Find the section that contains the content pair
-    const section = this.sections.find(section => section.contentPairs.some(contentPair => contentPair.id === contentPairId));
-    if (section) {
-        // Find the content pair within the section
-        const contentPair = section.contentPairs.find(cp => cp.id === contentPairId);
-        if (contentPair) {
-            // Update the content of the content pair with the selected content ID
-            contentPair.content = event.detail; // Use event.detail directly
+    handlesectionTitleChange(event) {
+        const sectionId = parseInt(event.target.dataset.id, 10); // Convert to number
+        if (!isNaN(sectionId)) {
+            this.pitch.sections[sectionId - 1].name = event.target.value;
         }
     }
-}
 
-
-
-handlesectionTaglineChange(event) {
-    // Retrieve the content pair ID from the event
-    const contentPairId = event.target.dataset.id;
-    // Find the section that contains the content pair
-    const section = this.sections.find(section => section.contentPairs.some(contentPair => contentPair.id === contentPairId));
-    if (section) {
-        // Find the content pair within the section
-        const contentPair = section.contentPairs.find(cp => cp.id === contentPairId);
-        if (contentPair) {
-            // Update the tagline of the content pair
-            contentPair.tagline = event.target.value;
+    handleContentSelected(event) {
+        const contentPairId = event.target.dataset.id;
+        const section = this.pitch.sections.find(section => section.contents.some(contentPair => contentPair.id === contentPairId));
+        if (section) {
+            const contentPair = section.contents.find(cp => cp.id === contentPairId);
+            if (contentPair) {
+                contentPair.content = event.detail;
+            }
         }
     }
-}
+
+    handlesectionTaglineChange(event) {
+        const contentPairId = event.target.dataset.id;
+        const section = this.pitch.sections.find(section => section.contents.some(contentPair => contentPair.id === contentPairId));
+        if (section) {
+            const contentPair = section.contents.find(cp => cp.id === contentPairId);
+            if (contentPair) {
+                contentPair.tagline = event.target.value;
+            }
+        }
+    }
 
     handleNext() {
-        // Toggle the flag to switch to the next set of input fields
-        // console.log('Selected pitch name:', this.newPitchName);
-        // console.log('Selected pitch title:', this.newPitchTitle);
-        // console.log('Selected pitch headline:', this.newPitchHeadline);
-        // console.log('Selected pitch description:', this.newPitchDescription);
-        // console.log('Selected Pitch Layout Id:', this.selectedPitchLayoutId);
-        // console.log('Selected opp Id:', this.currentRecordId);
         this.showNextInputFields = true;
     }
 
@@ -132,86 +117,81 @@ handlesectionTaglineChange(event) {
     }
 
     savePitch() {
-        // Add logic to save the pitch
+        console.log("Pitch object to save:", this.pitch);
+        // Add logic to save the pitch object
 
-        console.log("sections:", this.sections);
 
         this.closeModal();
         this.showNextInputFields = false;
-
-        this.newPitchName = "";
-        this.newPitchTitle = "";
-        this.newPitchHeadline = "";
-        this.newPitchDescription = "";
-        this.selectedPitchLayoutId = "";
-        this.currentRecordId = "";
+        this.pitch = {
+            name: '',
+            opportunity_id: '',
+            title: '',
+            headline: '',
+            description: '',
+            pitch_layout: '',
+            sections: [{
+            id: 1,
+            name: '',
+            contents: [
+                {
+                    id: '1-1',
+                    content: '',
+                    tagline: ''
+                }
+            ]
+        }]
+        };
     }
-    
-addsection() {
-    const newsectionId = this.sections.length + 1;
-    // Initialize an empty array for contentPairs
+
+    addsection() {
+    const newsectionId = this.pitch.sections.length + 1;
     const contentPairs = [];
-    // Add a new content pair with a unique ID
     contentPairs.push({
-        id: `${newsectionId}-1`, // Unique identifier for the content pair
-        content: '', // Example value
-        tagline: '' // Example value
+        id: `${newsectionId}-1`,
+        content: '',
+        tagline: ''
     });
-    // Push the new section with its contentPairs array
-    this.sections.push({
+    this.pitch.sections.push({
         id: newsectionId,
-        title: '',
-        contentPairs: contentPairs
+        name: '',
+        contents: contentPairs
     });
-}
+    // Force a re-render by reassigning the pitch object to itself
+    this.pitch = { ...this.pitch };
+    }
 
-
-
-addContentPair(event) {
-    // Retrieve the id of the section to which the content pair will be added
+    addContentPair(event) {
     const sectionId = parseInt(event.target.dataset.sectionId, 10);
-
-    // Find the section by its id
-    const section = this.sections.find(section => section.id === sectionId);
-
-    // If the section is found, add a new content pair to its contentPairs array
+    const section = this.pitch.sections.find(section => section.id === sectionId);
     if (section) {
-        // Generate a unique ID for the new content pair
-        // This ID is a combination of the section ID and the current length of the contentPairs array
-        const newContentPairId = section.contentPairs.length + 1;
-
-        // Add the new content pair with the unique ID
-        section.contentPairs.push({
-            id: `${sectionId}-${newContentPairId}`, // Unique identifier for the content pair
-            content: '', // Example value
-            tagline: '' // Example value
+        const newContentPairId = section.contents.length + 1;
+        section.contents.push({
+            id: `${sectionId}-${newContentPairId}`, // Adjusted id format
+            content: '',
+            tagline: ''
         });
+        // Force a re-render by reassigning the pitch object to itself
+        this.pitch = { ...this.pitch };
     }
 }
 
-    
-removeContentPair(event) {
-    // Retrieve the id of the content pair to be removed from the event
-    const contentPairId = event.target.dataset.id; // Keep it as a string
-    console.log("Content Pair ID to remove:", contentPairId);
 
-    // Find the section that contains the content pair
-    const section = this.sections.find(section => section.contentPairs.some(contentPair => contentPair.id === contentPairId));
-    console.log("Section found:", section);
-
-    // If the section is found, remove the content pair from its contentPairs array
+    removeContentPair(event) {
+    const contentPairId = event.target.dataset.id;
+    const section = this.pitch.sections.find(section => section.contents.some(contentPair => contentPair.id === contentPairId));
     if (section) {
-        section.contentPairs = section.contentPairs.filter(contentPair => contentPair.id !== contentPairId);
-        // Notify the component of changes if necessary
-        this.sections = [...this.sections]; // This line ensures reactivity by creating a new array
+        section.contents = section.contents.filter(contentPair => contentPair.id !== contentPairId);
+        // Force a re-render by reassigning the pitch object to itself
+        this.pitch = { ...this.pitch };
     }
-}
-
-    removesection(event) {
-        // Retrieve the id of the section to be removed from the event
-        const sectionId = event.target.dataset.id;
-
-        // Filter out the section with the matching id from the sections array
-        this.sections = this.sections.filter(section => section.id !== parseInt(sectionId));
     }
+
+   removesection(event) {
+    const sectionId = event.target.dataset.id;
+    this.pitch.sections = this.pitch.sections.filter(section => section.id !== parseInt(sectionId));
+    // Force a re-render by reassigning the pitch object to itself
+    this.pitch = { ...this.pitch };
+   }
+
 }
