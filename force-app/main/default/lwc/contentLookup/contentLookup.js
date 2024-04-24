@@ -36,25 +36,36 @@ export default class CustomLookupComp extends LightningElement {
     handleKeyChange(event) {
         this.messageResult = false;
         this.contentName = event.target.value;
-        console.log("handleKeyChange", event)
     }
 
-    // handleContentSelection(event) {
-    //     this.showSearchedValues = false;
-    //     this.contentId = event.target.dataset.value;
-    //     this.contentName = event.target.dataset.label;
-    //     const selectedEvent = new CustomEvent('selected', { detail: this.contentId });
-    //     this.dispatchEvent(selectedEvent);
-    //     console.log(this.contentId)
-    // }
     handleContentSelection(event) {
-    this.showSearchedValues = false;
+    // this.showSearchedValues = false;
     this.contentId = event.target.dataset.value;
     this.contentName = event.target.dataset.label;
     const selectedEvent = new CustomEvent('selected', { detail: this.contentId });
     this.dispatchEvent(selectedEvent);
-    console.log(this.contentId)
+        
+    // Delay hiding the options box to allow the click event to complete
+    setTimeout(() => {
+        this.showSearchedValues = false;
+    }, 1000);
     }
+
+    // handleContentSelection(event) {
+//     this.contentId = event.target.dataset.value;
+//     this.contentName = event.target.dataset.label;
+//     const selectedEvent = new CustomEvent('selected', { detail: this.contentId });
+//     this.dispatchEvent(selectedEvent);
+    
+//     // Prevent the default behavior of the click event
+//     event.preventDefault();
+    
+//     // Optionally, you can stop the event propagation to prevent it from bubbling up
+//     // event.stopPropagation();
+
+//     // Hide the options box
+//     this.showSearchedValues = false;
+// }
 
 
     handleOpenModal() {

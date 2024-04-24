@@ -3,8 +3,8 @@ import getPitchLayouts from '@salesforce/apex/OpportunityPitchController.getPitc
 import getContentData from '@salesforce/apex/OpportunityPitchController.getContentData'; 
 import contentLookup from 'c/contentLookup';
 import revspireLogo from '@salesforce/resourceUrl/revspireLogo'
-// import createPitch from '@salesforce/apex/PitchCreationController.createPitch';
-const headerImageUrl = '';
+import Id from '@salesforce/user/Id';
+import createPitch from '@salesforce/apex/PitchCreationController.createPitch';
 
 export default class PitchDialog extends LightningElement {
     headerImage = revspireLogo;
@@ -16,6 +16,7 @@ export default class PitchDialog extends LightningElement {
         headline: '',
         description: '',
         pitch_layout: '',
+        created_by: Id,
         sections: [{
             id: 1,
             name: '',
@@ -58,12 +59,13 @@ export default class PitchDialog extends LightningElement {
             console.error('Error fetching content data:', error);
         }
     }
+    
     connectedCallback() {
     // Update the opportunity_id with the currentRecordId when the component is connected
     this.pitch.opportunity_id = this.currentRecordId;
     }
+
     closeModal() {
-        console.log("Pitch object:", this.pitch);
         this.dispatchEvent(new CustomEvent('close'));
     }
 
@@ -87,7 +89,6 @@ export default class PitchDialog extends LightningElement {
         this.pitch.description = event.target.value;
     }
 
-
     handleOrgLogoUpload(event) {
         this.orgLogoFile = event.detail.files[0];
     }
@@ -103,7 +104,7 @@ export default class PitchDialog extends LightningElement {
             this.pitch.sections[sectionId - 1].name = event.target.value;
         }
     }
-
+    
     handleContentSelected(event) {
         const contentPairId = event.target.dataset.id;
         const section = this.pitch.sections.find(section => section.contents.some(contentPair => contentPair.id === contentPairId));
@@ -136,20 +137,31 @@ export default class PitchDialog extends LightningElement {
 
     savePitch() {
     console.log("Pitch object to save:", this.pitch);
+        
+
+    // Iterate over sections and remove 'id' from each section
+    this.pitch.sections.forEach(section => {
+        delete section.id;
+        // Iterate over contents within each section
+        section.contents.forEach((content, index) => {
+            // Remove 'id' from each content
+            delete content.id;
+            // Add 'arrangement' field to each content based on its order
+            content.arrangement = index + 1;
+        });
+    }); 
     // Convert the pitch object to a JSON string
     const pitchJsonString = JSON.stringify(this.pitch);
     console.log("string pitch", pitchJsonString)
         
-    // // Call the Apex method to create the pitch
-    // createPitch({ jsonInput: pitchJsonString })
-    // .then(result => {
-    //     console.log('Pitch created successfully:', result);
-    //     // Handle success, e.g., show a success message or navigate to another page
-    // })
-    // .catch(error => {
-    //     console.error('Error creating pitch:', error);
-    //     // Handle error, e.g., show an error message
-    // });
+    // Call the Apex method to create the pitch
+    createPitch({ jsonInput: pitchJsonString })
+    .then(result => {
+        console.log('Pitch created successfully:', result);
+    })
+    .catch(error => {
+        console.error('Error creating pitch:', error);
+    });
 
     this.closeModal();
     this.showNextInputFields = false;
@@ -173,7 +185,6 @@ export default class PitchDialog extends LightningElement {
         }]
     };
     }
-
 
     addsection() {
     const newsectionId = this.pitch.sections.length + 1;

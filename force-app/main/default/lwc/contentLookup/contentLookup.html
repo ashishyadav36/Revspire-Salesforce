@@ -30,13 +30,13 @@
                 No Result Found!
             </div>
             <template if:true={showSearchedValues}>
-               
-                <div class="options-box" >
+                <div class="options-box slds-border_bottom slds-border_left slds-border_right slds-border_top"
+                    style="max-height: 130px; overflow-y: auto;">
                     <ul class="" role="">
                         <template for:each={contentList} for:item="contentObj">
                             <li class="list-item slds-p-vertical_x-small slds-p-left_small slds-border_top" style="cursor: pointer;"
-                                key={contentObj.Id} onclick={handleContentSelection}
-                                data-value={contentObj.Id} data-label={contentObj.Name}>
+                                key={contentObj.Id} onclick={handleContentSelection} data-value={contentObj.Id}
+                                data-label={contentObj.Name}>
                                 {contentObj.Name}
                             </li>
                         </template>

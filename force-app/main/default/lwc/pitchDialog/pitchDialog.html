@@ -13,6 +13,7 @@
                     <div class="logo-title-div">
                         <img src={headerImage} alt="Header Image" class="header-image" />
                         <h4 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Add New Pitch</h4>
+                        <div></div>
                     </div>
                 </header>
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
@@ -33,12 +34,6 @@
                         <lightning-textarea label="Description " value={newPitchDescription}
                             onchange={handleDescriptionChange}></lightning-textarea>
                         <div class="file-input">
-                            <!-- <lightning-file-upload label="Organization Logo" name="fileUploader" accept={acceptedFormats} record-id={myRecordId}
-                                onuploadfinished={handleUploadFinished} multiple>
-                            </lightning-file-upload>
-                            <lightning-file-upload class="slds-m-right_medium" label="Background Image" name="fileUploader" accept={acceptedFormats} record-id={myRecordId}
-                                onuploadfinished={handleUploadFinished} multiple>
-                            </lightning-file-upload> -->
                             <lightning-file-upload label="Organization Logo" name="orgLogoUploader" accept={acceptedFormats} record-id={myRecordId}
                                 onuploadfinished={handleOrgLogoUpload} >
                             </lightning-file-upload>

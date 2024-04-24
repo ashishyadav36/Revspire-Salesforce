@@ -29,12 +29,12 @@
 
 .logo-title-div{
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-}
 
+}
 .header-image {
-    width: 200px;
+    width: 35px;
     height: auto;
-    margin-bottom: 10px;
 }             
